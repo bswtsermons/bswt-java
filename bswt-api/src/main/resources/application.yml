@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:mysql://www.bswt.org/bswtsermons
+    username: tbholdren
+    password: r7ZhikTunkPR7RVB
+    driver-class-name: com.mysql.jdbc.Driver
