@@ -1,36 +1,67 @@
 package org.bswt.api.model;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
+@Table(uniqueConstraints={
+  @UniqueConstraint(columnNames={ "date_preached", "date_series" })
+})
 public class Service 
 {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private long id;
+	@Column(name="service_id")
+	private Long id;
 	
+	@Column(name="date_preached")
+	@Temporal(TemporalType.DATE)
 	private Date date;
 	
+	/** this is an incremental counter in case there are multiple services in 
+	 * one day, which we almost never have.
+	 */
+	@Column(name="date_series")
 	private int series;
 	
+	private String minister;
+	
+	@Column(name="subseries_title")
 	private String title;
 	
-	private int part;
+	@Column(name="subseries_part")
+	private Integer part;
 	
+	@Column(name="series_name")
 	private String seriesTitle;
 	
-	private int seriesPart;
+	@Column(name="series_part")
+	private Integer seriesPart;
 	
-	public long getId() {
+	private String location;
+	
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="service")
+	private List<Media> media;
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -50,6 +81,14 @@ public class Service
 		this.series = series;
 	}
 
+	public String getMinister() {
+		return minister;
+	}
+
+	public void setMinister(String minister) {
+		this.minister = minister;
+	}
+
 	public String getTitle() {
 		return title;
 	}
@@ -58,11 +97,11 @@ public class Service
 		this.title = title;
 	}
 
-	public int getPart() {
+	public Integer getPart() {
 		return part;
 	}
 
-	public void setPart(int part) {
+	public void setPart(Integer part) {
 		this.part = part;
 	}
 
@@ -74,11 +113,11 @@ public class Service
 		this.seriesTitle = seriesTitle;
 	}
 
-	public int getSeriesPart() {
+	public Integer getSeriesPart() {
 		return seriesPart;
 	}
 
-	public void setSeriesPart(int seriesPart) {
+	public void setSeriesPart(Integer seriesPart) {
 		this.seriesPart = seriesPart;
 	}
 
@@ -86,9 +125,15 @@ public class Service
 		return location;
 	}
 
-	public void setLocation(String location) {
+	public void setLocation(String location) { 
 		this.location = location;
 	}
 
-	private String location;
+	public List<Media> getMedia() {
+		return media;
+	}
+
+	public void setMedia(List<Media> media) {
+		this.media = media;
+	}
 }
