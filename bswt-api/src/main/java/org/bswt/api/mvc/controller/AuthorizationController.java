@@ -26,13 +26,13 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class AuthorizationController
 {
 	@Resource
-	private SubjectsConfiguration subjectsConfiguration; 
-	
+	private SubjectsConfiguration subjectsConfiguration;
+
 	@Value("${bswt.api.rest.secret:bswt-secret}")
 	private String secret;
-	
+
 	private Map<String, Subject> subjectMap = new HashMap<>();
-	
+
 	// TODO: maybe put the subjects into a separate properties file or something
 	@PostConstruct
 	private void init()
@@ -42,66 +42,70 @@ public class AuthorizationController
 			subjectMap.put(subject.getName(), subject);
 		}
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST)
-    public LoginResponse login(@RequestBody final Subject subject) throws ServletException 
+	public LoginResponse login(@RequestBody final Subject subject) throws ServletException
 	{
-		if (StringUtils.isBlank(subject.getName())) 
-        {
-            throw new ServletException("Invalid authorization request");
-        }
-		
+		if (StringUtils.isBlank(subject.getName()))
+		{
+			throw new ServletException("Invalid authorization request");
+		}
+
 		Subject namedSubject = subjectMap.get(subject.getName());
 		if (namedSubject == null || !StringUtils.equals(namedSubject.getSecret(), subject.getSecret()))
 		{
 			throw new ServletException("Invalid authorization request");
 		}
-		
-        return new LoginResponse(Jwts.builder().setSubject(subject.getName())
-            .claim("roles", subjectMap.get(subject.getName()).getClaims()).setIssuedAt(new Date())
-            .signWith(SignatureAlgorithm.HS256, secret).compact());
-    }
-	
+
+		return new LoginResponse(Jwts.builder().setSubject(subject.getName())
+				.claim("roles", subjectMap.get(subject.getName()).getClaims()).setIssuedAt(new Date())
+				.signWith(SignatureAlgorithm.HS256, secret).compact());
+	}
+
 	public static class Subject
 	{
-        public String name;
+		public String name;
 		public String secret;
-        public List<String> claims = new ArrayList<>();
-        
+		public List<String> claims = new ArrayList<>();
+
 		public String getName()
 		{
 			return name;
 		}
+
 		public void setName(String name)
 		{
 			this.name = name;
 		}
+
 		public String getSecret()
 		{
 			return secret;
 		}
+
 		public void setSecret(String secret)
 		{
 			this.secret = secret;
 		}
+
 		public List<String> getClaims()
 		{
 			return claims;
 		}
+
 		public void setClaims(List<String> claims)
 		{
 			this.claims = claims;
 		}
-    }
-	
+	}
+
 	private static class LoginResponse
 	{
-        @SuppressWarnings("unused")
+		@SuppressWarnings("unused")
 		public String token;
 
-        public LoginResponse(final String token) 
-        {
-            this.token = token;
-        }
-    }
+		public LoginResponse(final String token) {
+			this.token = token;
+		}
+	}
 }

@@ -19,17 +19,17 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/rest/media")
-public class MediaController 
+public class MediaController
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MediaController.class);
-	
-	@Resource 
+
+	@Resource
 	ServiceRepository serviceRepository;
-	
+
 	@Resource
 	private MediaRepository mediaRepository;
 
-	@RequestMapping(value="/{id}", method=RequestMethod.GET)
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Media> get(@PathVariable long id)
 	{
 		Media media = mediaRepository.findOne(id);
@@ -39,21 +39,23 @@ public class MediaController
 		}
 		return new ResponseEntity<Media>(media, HttpStatus.OK);
 	}
-	
-	@RequestMapping(method=RequestMethod.POST)
+
+	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> create(@RequestBody Media media, UriComponentsBuilder uriComponentsBuilder)
 	{
-		Media existingMedia = mediaRepository.findByServiceAndTypeAndRepositoryAndExtension(media.getService(), media.getType(), media.getRepository(), media.getExtension());
-		
+		Media existingMedia = mediaRepository.findByServiceAndTypeAndRepositoryAndExtension(media.getService(),
+				media.getType(), media.getRepository(), media.getExtension());
+
 		if (existingMedia != null)
 		{
-			LOGGER.info(String.format("duplicate media with service id %d and type %s and repository %s and extension %s", 
-					                   media.getService().getId(), media.getType(), media.getRepository(), media.getExtension()));
-            return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+			LOGGER.info(
+					String.format("duplicate media with service id %d and type %s and repository %s and extension %s",
+							media.getService().getId(), media.getType(), media.getRepository(), media.getExtension()));
+			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
 		}
-		
+
 		mediaRepository.save(media);
-		
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(uriComponentsBuilder.path("/rest/media/{id}").buildAndExpand(media.getId()).toUri());
 		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);

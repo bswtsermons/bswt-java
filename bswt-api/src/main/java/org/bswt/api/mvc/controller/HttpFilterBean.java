@@ -18,16 +18,16 @@ public abstract class HttpFilterBean extends GenericFilterBean
 	{
 		this.requestMethods = requestMethods;
 	}
-	
+
 	public void addRequestMethod(String requestMethod)
-	
+
 	{
 		requestMethods.add(requestMethod);
 	}
-	
+
 	public boolean requestMethodFound(String requestMethod)
 	{
 		return requestMethods.contains(requestMethod);
 	}
-	
+
 }

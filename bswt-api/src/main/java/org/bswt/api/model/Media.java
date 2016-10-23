@@ -14,67 +14,74 @@ import javax.persistence.UniqueConstraint;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(uniqueConstraints={
-  @UniqueConstraint(columnNames={ "service_id", "type", "repository", "extension" })
-})
-public class Media 
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "service_id", "type", "repository", "extension" }) })
+public class Media
 {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="media_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "media_id")
 	private Long id;
-	
+
 	@JsonIgnore // if you don't do this you get infinite recursion from jackson!
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="service_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "service_id")
 	private Service service;
-	
+
 	// TODO - figure out how to do this with enums
 	private String type;
-	
+
 	private String repository;
-	
+
 	private String extension;
 
-	public Long getId() {
+	public Long getId()
+	{
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Long id)
+	{
 		this.id = id;
 	}
 
-	public String getType() {
+	public String getType()
+	{
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(String type)
+	{
 		this.type = type;
 	}
 
-	public String getRepository() {
+	public String getRepository()
+	{
 		return repository;
 	}
 
-	public void setRepository(String repository) {
+	public void setRepository(String repository)
+	{
 		this.repository = repository;
 	}
 
-	public String getExtension() {
+	public String getExtension()
+	{
 		return extension;
 	}
 
-	public void setExtension(String extension) {
+	public void setExtension(String extension)
+	{
 		this.extension = extension;
 	}
 
-	public Service getService() {
+	public Service getService()
+	{
 		return service;
 	}
 
-	public void setService(Service service) {
+	public void setService(Service service)
+	{
 		this.service = service;
 	}
-	
-	
+
 }

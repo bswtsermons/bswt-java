@@ -14,26 +14,26 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/rest/website-config")
-public class WebsiteConfigController 
+public class WebsiteConfigController
 {
 	@Resource
 	private WebsiteConfigRepository websiteConfigRepository;
-	
-	@RequestMapping(method=RequestMethod.GET)
+
+	@RequestMapping(method = RequestMethod.GET)
 	public List<WebsiteConfig> getAll()
 	{
 		List<WebsiteConfig> target = new ArrayList<>();
 		websiteConfigRepository.findAll().forEach(target::add);
 		return target;
 	}
-	
-	@RequestMapping(value="/{id}", method=RequestMethod.GET)
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public WebsiteConfig get(@PathVariable long id)
 	{
 		return websiteConfigRepository.findOne(id);
 	}
-	
-	@RequestMapping(value="/by-key/{key}")
+
+	@RequestMapping(value = "/by-key/{key}")
 	public WebsiteConfig get(@PathVariable String key)
 	{
 		return websiteConfigRepository.findByKey(key);

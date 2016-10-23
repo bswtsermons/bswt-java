@@ -22,52 +22,52 @@ import io.jsonwebtoken.SignatureException;
 public class JwtFilterBean extends HttpFilterBean
 {
 	private static final Logger LOG = LoggerFactory.getLogger(JwtFilterBean.class);
-	
+
 	private String secret;
-	
+
 	private List<String> requiredRoles = new ArrayList<>();
-	
+
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException
 	{
-        final HttpServletRequest httpRequest = (HttpServletRequest) request;
-        
-        LOG.info("request method: {}", httpRequest.getMethod());
-        
-        if (requestMethodFound(httpRequest.getMethod()))
-        {
-        	final String authHeader = httpRequest.getHeader("Authorization");
-            if (authHeader == null || !authHeader.startsWith("Bearer ")) 
-            {
-                throw new ServletException("Missing or invalid Authorization header.");
-            }
-            
-            final String token = authHeader.substring(7); // The part after "Bearer "
-            try 
-            {
-                final Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
-                @SuppressWarnings("unchecked")
-				Set<String> roles = new HashSet<>(claims.get("roles", List.class));
-                request.setAttribute("claims", claims);
-                
-                for (String requiredRole : requiredRoles)
-               	{
-                	if (!roles.contains(requiredRole))
-               		{
-               			// they don't have one of our required claims.  no dice.
-               			throw new ServletException("Required permissions not present.");
-               		}
-               	}
-            }
-            catch (final SignatureException e) 
-            {
-                throw new ServletException("Invalid token.");
-            }
+		final HttpServletRequest httpRequest = (HttpServletRequest) request;
 
-        }
-        
-        chain.doFilter(request, response);
+		LOG.info("request method: {}", httpRequest.getMethod());
+
+		if (requestMethodFound(httpRequest.getMethod()))
+		{
+			final String authHeader = httpRequest.getHeader("Authorization");
+			if (authHeader == null || !authHeader.startsWith("Bearer "))
+			{
+				throw new ServletException("Missing or invalid Authorization header.");
+			}
+
+			final String token = authHeader.substring(7); // The part after
+															// "Bearer "
+			try
+			{
+				final Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+				@SuppressWarnings("unchecked")
+				Set<String> roles = new HashSet<>(claims.get("roles", List.class));
+				request.setAttribute("claims", claims);
+
+				for (String requiredRole : requiredRoles)
+				{
+					if (!roles.contains(requiredRole))
+					{
+						// they don't have one of our required claims. no dice.
+						throw new ServletException("Required permissions not present.");
+					}
+				}
+			} catch (final SignatureException e)
+			{
+				throw new ServletException("Invalid token.");
+			}
+
+		}
+
+		chain.doFilter(request, response);
 	}
 
 	public String getSecret()
@@ -79,7 +79,7 @@ public class JwtFilterBean extends HttpFilterBean
 	{
 		this.secret = secret;
 	}
-	
+
 	public void addRequiredRole(String requiredRole)
 	{
 		requiredRoles.add(requiredRole);
@@ -97,5 +97,5 @@ public class JwtFilterBean extends HttpFilterBean
 	{
 		this.requiredRoles = requiredRoles;
 	}
-		
+
 }

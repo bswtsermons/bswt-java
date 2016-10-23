@@ -6,7 +6,7 @@ import java.util.List;
 import org.bswt.api.mvc.controller.AuthorizationController.Subject;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix="bswt.api.rest")
+@ConfigurationProperties(prefix = "bswt.api.rest")
 public class SubjectsConfiguration
 {
 	private List<Subject> subjects = new ArrayList<>();

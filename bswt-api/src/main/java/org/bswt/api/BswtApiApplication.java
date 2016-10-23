@@ -14,21 +14,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @EnableConfigurationProperties(SubjectsConfiguration.class)
 @SpringBootApplication
-public class BswtApiApplication 
+public class BswtApiApplication
 {
 	@Value("${bswt.api.rest.secret:bswt-secret}")
 	private String secret;
-	
+
 	@Value("#{'${bswt.api.rest.admin.requiredRoles:admin}'.split(',')}")
 	private List<String> adminRequiredRoles = new ArrayList<>();
-	
-	public static void main(String[] args) 
+
+	public static void main(String[] args)
 	{
 		SpringApplication.run(BswtApiApplication.class, args);
 	}
-	
+
 	/**
 	 * this filter secures PUT and POST requests for our CRUD services
+	 * 
 	 * @return
 	 */
 	@Bean
@@ -39,13 +40,13 @@ public class BswtApiApplication
 		jfb.addRequestMethod(RequestMethod.PUT.toString());
 		jfb.setSecret(secret);
 		jfb.getRequiredRoles().addAll(adminRequiredRoles);
-		
+
 		final FilterRegistrationBean frb = new FilterRegistrationBean();
 		frb.addUrlPatterns("/rest/service/*");
 		frb.addUrlPatterns("/rest/media/*");
 		frb.addUrlPatterns("/rest/website-config/*");
 		frb.setFilter(jfb);
-		
+
 		return frb;
 	}
 }
