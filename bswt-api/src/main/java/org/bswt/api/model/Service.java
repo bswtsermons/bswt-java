@@ -15,8 +15,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 @Entity
 @Table(uniqueConstraints={
   @UniqueConstraint(columnNames={ "date_preached", "date_series" })
