@@ -7,6 +7,8 @@ import javax.annotation.Resource;
 
 import org.bswt.api.dao.WebsiteConfigRepository;
 import org.bswt.api.model.WebsiteConfig;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,22 +22,42 @@ public class WebsiteConfigController
 	private WebsiteConfigRepository websiteConfigRepository;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public List<WebsiteConfig> getAll()
+	public ResponseEntity<List<WebsiteConfig>> getAll()
 	{
 		List<WebsiteConfig> target = new ArrayList<>();
 		websiteConfigRepository.findAll().forEach(target::add);
-		return target;
+		return new ResponseEntity<List<WebsiteConfig>>(target, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public WebsiteConfig get(@PathVariable long id)
+	public ResponseEntity<WebsiteConfig> get(@PathVariable long id)
 	{
-		return websiteConfigRepository.findOne(id);
+		ResponseEntity<WebsiteConfig> re;
+		WebsiteConfig wsc = websiteConfigRepository.findOne(id);
+		if (wsc == null)
+		{
+			re = new ResponseEntity<WebsiteConfig>(HttpStatus.NOT_FOUND);
+		}
+		else
+		{
+			re = new ResponseEntity<WebsiteConfig>(wsc, HttpStatus.OK);
+		}
+		return re;
 	}
 
 	@RequestMapping(value = "/by-key/{key}")
-	public WebsiteConfig get(@PathVariable String key)
+	public ResponseEntity<WebsiteConfig> get(@PathVariable String key)
 	{
-		return websiteConfigRepository.findByKey(key);
+		ResponseEntity<WebsiteConfig> re;
+		WebsiteConfig wsc = websiteConfigRepository.findByKey(key);
+		if (wsc == null)
+		{
+			re = new ResponseEntity<WebsiteConfig>(HttpStatus.NOT_FOUND);
+		}
+		else
+		{
+			re = new ResponseEntity<WebsiteConfig>(wsc, HttpStatus.OK);
+		}
+		return re;
 	}
 }

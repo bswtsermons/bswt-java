@@ -19,6 +19,13 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureException;
 
+/**
+ * If the filter matches (along with http method), check that we have a valid
+ * jwt token and the roles required to access this url pattern 
+ * 
+ * @see HttpFilterBean
+ * 
+ */
 public class JwtFilterBean extends HttpFilterBean
 {
 	private static final Logger LOG = LoggerFactory.getLogger(JwtFilterBean.class);
@@ -32,8 +39,6 @@ public class JwtFilterBean extends HttpFilterBean
 			throws IOException, ServletException
 	{
 		final HttpServletRequest httpRequest = (HttpServletRequest) request;
-
-		LOG.info("request method: {}", httpRequest.getMethod());
 
 		if (requestMethodFound(httpRequest.getMethod()))
 		{

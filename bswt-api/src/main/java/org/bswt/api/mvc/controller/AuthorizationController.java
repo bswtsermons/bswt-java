@@ -33,7 +33,7 @@ public class AuthorizationController
 
 	private Map<String, Subject> subjectMap = new HashMap<>();
 
-	// TODO: maybe put the subjects into a separate properties file or something
+	// TODO: see if there's a way to put the subjects into a map without doing this
 	@PostConstruct
 	private void init()
 	{
@@ -64,9 +64,9 @@ public class AuthorizationController
 
 	public static class Subject
 	{
-		public String name;
-		public String secret;
-		public List<String> claims = new ArrayList<>();
+		private String name;
+		private String secret;
+		private List<String> claims = new ArrayList<>();
 
 		public String getName()
 		{
