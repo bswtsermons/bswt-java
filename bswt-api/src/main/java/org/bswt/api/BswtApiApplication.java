@@ -44,7 +44,7 @@ public class BswtApiApplication
 		final FilterRegistrationBean frb = new FilterRegistrationBean();
 		frb.addUrlPatterns("/rest/service/*");
 		frb.addUrlPatterns("/rest/media/*");
-		frb.addUrlPatterns("/rest/website-config/*");
+		frb.addUrlPatterns("/rest/website-flag/*");
 		frb.setFilter(jfb);
 
 		return frb;
