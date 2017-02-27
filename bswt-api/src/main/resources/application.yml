@@ -6,14 +6,17 @@ spring:
     
 bswt:
   api:
-    rest:
-      secret: bswt-secret
-      
-      admin:
-        requiredRoles: admin
-      
-      subjects:
-        - name: admin
-          secret: admin-secret
-          claims: 
-            - admin
+    resourceId: bswt
+    credentials:
+      clientCredentials:
+        - clientId: trusted-app
+          grantTypes:
+            - client_credentials
+          authorities:
+            - ROLE_TRUSTED_CLIENT
+          scopes:
+            - read
+            - write
+          resourceId: bswt
+          accessTokenValiditySeconds: 3600
+          secret: d4e63d07-8fb6-440f-97d1-95344df8125a

@@ -45,7 +45,7 @@ public class WebsiteConfigController
 		return re;
 	}
 
-	@RequestMapping(value = "/by-key/{key}")
+	@RequestMapping(value = "/by-key/{key}", method=RequestMethod.GET)
 	public ResponseEntity<WebsiteConfig> get(@PathVariable String key)
 	{
 		ResponseEntity<WebsiteConfig> re;
